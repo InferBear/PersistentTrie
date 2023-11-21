@@ -80,7 +80,7 @@ Trie Trie::insert(std::string key, T value) const {
     auto dfs = [&](auto self, size_t idx, std::shared_ptr<const TrieNode> cur) -> std::shared_ptr<const TrieNode> {
         if (idx == size) {
             auto value_ptr = std::make_shared<T>(std::move(value));
-            if (cur) { // NOLINT(*-no-recursion)
+            if (cur) {
                 return std::make_shared<TrieValueNode<T>>(cur -> children, value_ptr);
             } else {
                 return std::make_shared<TrieValueNode<T>>(value_ptr);
