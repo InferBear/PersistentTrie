@@ -80,7 +80,7 @@ Trie Trie::insert(std::string key, T value) const {
     auto dfs = [&](auto self, size_t idx, std::shared_ptr<const TrieNode> cur) -> std::shared_ptr<const TrieNode> {
         if (idx == size) {
             auto value_ptr = std::make_shared<T>(std::move(value));
-            if (cur) {
+            if (cur) { // NOLINT(*-no-recursion)
                 return std::make_shared<TrieValueNode<T>>(cur -> children, value_ptr);
             } else {
                 return std::make_shared<TrieValueNode<T>>(value_ptr);
@@ -101,7 +101,7 @@ Trie Trie::insert(std::string key, T value) const {
         } else {
             ret = std::make_shared<TrieNode>();
         }
-        ret.get() -> children[k] = next;
+        ret -> children[k] = next;
         return ret;
     };
 
@@ -132,12 +132,14 @@ Trie Trie::remove(std::string key) const {
 
         auto next = self(self, idx + 1, cur);
 
-        if (next == nullptr) return nullptr;
+        if (next == nullptr) {
+            return nullptr;
+        }
 
         if (next->children.empty() && !next->isEndOfWord) {
-            ret.get()->children.erase(k);
+            ret->children.erase(k);
         } else {
-            ret.get()->children[k] = next;
+            ret->children[k] = next;
         }
 
         return ret;
